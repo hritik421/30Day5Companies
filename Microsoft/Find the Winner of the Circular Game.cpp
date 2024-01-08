@@ -1,0 +1,55 @@
+// There are n friends that are playing a game. The friends are sitting in a circle and are numbered from 1 to n in clockwise order. More formally, moving clockwise from the ith friend brings you to the (i+1)th friend for 1 <= i < n, and moving clockwise from the nth friend brings you to the 1st friend.
+
+// The rules of the game are as follows:
+
+// Start at the 1st friend.
+// Count the next k friends in the clockwise direction including the friend you started at. The counting wraps around the circle and may count some friends more than once.
+// The last friend you counted leaves the circle and loses the game.
+// If there is still more than one friend in the circle, go back to step 2 starting from the friend immediately clockwise of the friend who just lost and repeat.
+// Else, the last friend in the circle wins the game.
+// Given the number of friends, n, and an integer k, return the winner of the game.
+
+class ll{
+    public:
+    int data;
+    ll* next;
+    
+    ll(){
+        data = 0;
+        next = NULL;
+    }
+
+    ll(int x){
+        data = x;
+        next = NULL;
+    }
+
+};
+class Solution {
+public:
+    int findTheWinner(int n, int k) {
+        ll* head = new ll(1);
+        ll* prev = head;
+        for(int i=2;i<=n;i++){
+            prev->next = new ll(i);
+            prev = prev->next;
+        }
+        prev->next = head;
+        // Start the game
+        int size = n;
+        while(size>1){
+            int posToMove = k;
+            // Move pointer to ll
+            for(int i=1;i<posToMove;i++){
+                head = head->next;
+                prev = prev->next;
+            }
+            ll* temp = head;
+            head = head->next;
+            prev->next = head;
+            delete(temp);
+            size--;
+        }
+        return head->data;
+    }
+};
